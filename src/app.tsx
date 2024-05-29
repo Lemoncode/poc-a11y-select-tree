@@ -1,97 +1,67 @@
-import React from "react";
-import { useOnKey } from "./on-key.hook";
-import { useA11ySelect } from "./a11y-state.hook";
+import { CustomSelect } from './components/custom-select.component';
+import { CustomTreeSelect } from './components/custom-tree-select.component';
 
-interface Option {
+export interface TreeOption {
   id: string;
   label: string;
+  children?: TreeOption[];
 }
 
 const OPTION_LABELS = [
-  "weather",
-  "salsa recipes",
-  "cheap flights to NY",
-  "dictionary",
-  "baseball scores",
-  "hotels in NY",
-  "mortgage calculator",
-  "restaurants near me",
-  "free games",
-  "gas prices",
-  "classical music",
+  'weather',
+  'salsa recipes',
+  'cheap flights to NY',
+  'dictionary',
+  'baseball scores',
+  'hotels in NY',
+  'mortgage calculator',
+  'restaurants near me',
+  'free games',
+  'gas prices',
+  'classical music'
+];
+
+export const TREE_OPTION: TreeOption[] = [
+  {
+    id: 'lb2-01',
+    label: 'weather'
+  },
+  { id: 'lb2-02', label: 'salsa recipes' },
+  { id: 'lb2-03', label: 'cheap flights to NY' },
+  { id: 'lb2-04', label: 'dictionary' },
+  { id: 'lb2-05', label: 'baseball scores' },
+  {
+    id: 'lb2-06',
+    label: 'hotels in NY',
+
+    children: [
+      { id: 'lb22-01', label: 'Watter' },
+      { id: 'lb22-02', label: 'Sea' },
+      {
+        id: 'lb22-03',
+        label: 'River',
+
+        children: [
+          { id: 'lb23-00', label: 'Amazon' },
+          { id: 'lb23-01', label: 'Nile' },
+          { id: 'lb23-02', label: 'Mississippi' }
+        ]
+      }
+    ]
+  },
+  { id: 'lb2-07', label: 'mortgage calculator' },
+  { id: 'lb2-08', label: 'restaurants near me' },
+  { id: 'lb2-09', label: 'free games' },
+  { id: 'lb2-10', label: 'gas prices' },
+  { id: 'lb2-11', label: 'classical music' }
 ];
 
 export const App = () => {
-  const buttonRef = React.useRef<HTMLButtonElement>(null);
-  const [selectedOption, setSelectedOption] = React.useState<string | null>(
-    null
-  );
-  const getInitialSelected = (_: Option, index: number) => index === 0;
-  const {
-    isOpen,
-    setIsOpen,
-    list,
-    onFocusOption: onOptionFocus,
-  } = useA11ySelect(
-    OPTION_LABELS.map<Option>((label) => ({ id: label, label })),
-    getInitialSelected
-  );
-
-  const handleSelectOption = (id: string) => {
-    setSelectedOption(id);
-    setIsOpen(false);
-    buttonRef.current?.focus();
-  };
-
-  useOnKey([" ", "Enter"], (event: KeyboardEvent) => {
-    if (isOpen) {
-      event.preventDefault();
-      const focusedOption = list.find((option) => option.tabIndex === 0);
-      if (focusedOption) {
-        handleSelectOption(focusedOption.id);
-      }
-    }
-  });
-
   return (
     <div className="container">
-      <div>
-        <p>Custom Select</p>
-        <button
-          ref={buttonRef}
-          type="button"
-          aria-controls="listbox1"
-          aria-expanded={isOpen}
-          aria-haspopup="listbox"
-          aria-labelledby="combo1-label"
-          id="combo1"
-          role="combobox"
-          tabIndex={0}
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {selectedOption ? selectedOption : "Select an option"}
-          <ul
-            id="listbox1"
-            role="listbox"
-            aria-labelledby="combo1-label"
-            tabIndex={-1}
-            style={{ display: isOpen ? "block" : "none" }}
-          >
-            {list.map((option) => (
-              <li
-                key={option.id}
-                role="option"
-                tabIndex={option.tabIndex}
-                aria-selected={selectedOption === option.id}
-                onClick={() => handleSelectOption(option.id)}
-                ref={onOptionFocus(option)}
-              >
-                {option.label}
-              </li>
-            ))}
-          </ul>
-        </button>
-      </div>
+      <CustomSelect options={OPTION_LABELS} />
+      <CustomTreeSelect options={TREE_OPTION} />
+
       <div>
         <p>Real select</p>
         <select>
