@@ -11,11 +11,11 @@ export type FlatOption<Option extends BaseOption<Option>> = Omit<
   parentId?: string;
 };
 
-export type A11yTreeOption<Option extends BaseOption<Option>> = Omit<
+export type A11yNestedSelectOption<Option extends BaseOption<Option>> = Omit<
   Option,
   'children'
 > & {
   tabIndex: number;
   isSelectable: boolean;
-  children?: A11yTreeOption<Option>[];
+  children?: A11yNestedSelectOption<Option>[];
 };

@@ -1,4 +1,8 @@
-import { A11yTreeOption, BaseOption, FlatOption } from './tree.model';
+import {
+  A11yNestedSelectOption,
+  BaseOption,
+  FlatOption
+} from './nested-select.model';
 import { A11ySelectOption } from '../select';
 
 export const mapOptionsToFlatOptions = <Option extends BaseOption<Option>>(
@@ -22,7 +26,7 @@ export const mapOptionsToFlatOptions = <Option extends BaseOption<Option>>(
 
 export const mapFlatOptionsToOptions = <Option extends BaseOption<Option>>(
   flatOptions: A11ySelectOption<FlatOption<Option>>[]
-): A11yTreeOption<Option>[] => {
+): A11yNestedSelectOption<Option>[] => {
   const map = new Map<string, any>();
   flatOptions.forEach(flatOption => {
     const { parentId, tabIndex, id, ...option } = flatOption;

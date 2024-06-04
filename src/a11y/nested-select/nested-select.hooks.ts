@@ -1,13 +1,13 @@
 import { useA11ySelect } from '../select';
 import { useOnKey } from '../on-key.hook';
-import { BaseOption, FlatOption } from './tree.model';
+import { BaseOption, FlatOption } from './nested-select.model';
 import {
   mapOptionsToFlatOptions,
   mapFlatOptionsToOptions
-} from './tree.mappers';
-import { findPath } from './tree.helpers';
+} from './nested-select.mappers';
+import { findPath } from './nested-select.helpers';
 
-export const useA11yTree = <Option extends BaseOption<Option>>(
+export const useA11yNestedSelect = <Option extends BaseOption<Option>>(
   options: Option[],
   getOptionId: <Key extends keyof FlatOption<Option>>(
     option: FlatOption<Option>

@@ -1,14 +1,16 @@
-import { A11yTreeOption } from '../a11y';
+import { A11yNestedSelectOption } from '../a11y';
 import { TreeOption } from '../app';
 
 interface Props {
-  option: A11yTreeOption<TreeOption>;
-  selectedOption: A11yTreeOption<TreeOption> | undefined;
-  onFocusOption: (option: A11yTreeOption<TreeOption>) => (element: any) => void;
+  option: A11yNestedSelectOption<TreeOption>;
+  selectedOption: A11yNestedSelectOption<TreeOption> | undefined;
+  onFocusOption: (
+    option: A11yNestedSelectOption<TreeOption>
+  ) => (element: any) => void;
   handleSelectOption: (id: string) => void;
 }
 
-export const ChildrenList: React.FC<Props> = props => {
+export const NestedOptions: React.FC<Props> = props => {
   const { option, selectedOption, handleSelectOption, onFocusOption } = props;
   return (
     <li
@@ -24,13 +26,13 @@ export const ChildrenList: React.FC<Props> = props => {
       <ul role="group">
         {option.children?.map(child => {
           return child.children ? (
-            <ChildrenList
+            <NestedOptions
               handleSelectOption={handleSelectOption}
               option={child}
               selectedOption={selectedOption}
               key={child.id}
               onFocusOption={onFocusOption}
-            ></ChildrenList>
+            ></NestedOptions>
           ) : (
             <li
               key={child.id}

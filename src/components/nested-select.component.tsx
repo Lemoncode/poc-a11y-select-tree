@@ -1,13 +1,13 @@
 import React from 'react';
 import { TreeOption } from '../app';
-import { ChildrenList } from './childrenList.component';
-import { useA11yTree } from '../a11y';
+import { useA11yNestedSelect } from '../a11y';
+import { NestedOptions } from './nested-options.component';
 
 interface Props {
   options: TreeOption[];
 }
 
-export const CustomTreeSelect: React.FC<Props> = prop => {
+export const NestedSelect: React.FC<Props> = prop => {
   const { options } = prop;
 
   const buttonRef = React.useRef<HTMLButtonElement>(null);
@@ -21,7 +21,12 @@ export const CustomTreeSelect: React.FC<Props> = prop => {
     selectedOption,
     setSelectedOption,
     selectedPath
-  } = useA11yTree(options, option => option.id, optionsContainerRef, buttonRef);
+  } = useA11yNestedSelect(
+    options,
+    option => option.id,
+    optionsContainerRef,
+    buttonRef
+  );
 
   // React.useEffect(() => {
   //   setTimeout(() => {
@@ -55,13 +60,13 @@ export const CustomTreeSelect: React.FC<Props> = prop => {
         >
           {optionList.map(option => {
             return option.children ? (
-              <ChildrenList
+              <NestedOptions
                 handleSelectOption={setSelectedOption}
                 option={option}
                 selectedOption={selectedOption}
                 onFocusOption={onFocusOption}
                 key={option.id}
-              ></ChildrenList>
+              ></NestedOptions>
             ) : (
               <li
                 key={option.id}

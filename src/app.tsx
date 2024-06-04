@@ -1,5 +1,4 @@
-import { CustomSelect } from './components/custom-select.component';
-import { CustomTreeSelect } from './components/custom-tree-select.component';
+import { NestedSelect, Select, NestedList } from './components';
 
 export interface TreeOption {
   id: string;
@@ -59,8 +58,8 @@ export const TREE_OPTION: TreeOption[] = [
 export const App = () => {
   return (
     <div className="container">
-      <CustomSelect options={OPTION_LABELS} />
-      <CustomTreeSelect options={TREE_OPTION} />
+      <Select options={OPTION_LABELS} />
+      <NestedSelect options={TREE_OPTION} />
 
       <div>
         <p>Real select</p>
@@ -73,6 +72,7 @@ export const App = () => {
           <option id="lb2-06">hotels in NY</option>
         </select>
       </div>
+      <NestedList options={TREE_OPTION} />
     </div>
   );
 };

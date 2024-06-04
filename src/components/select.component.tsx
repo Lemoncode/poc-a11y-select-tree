@@ -8,7 +8,7 @@ interface Option {
 interface Props {
   options: string[];
 }
-export const CustomSelect: React.FC<Props> = props => {
+export const Select: React.FC<Props> = props => {
   const { options } = props;
   const buttonRef = React.useRef<HTMLButtonElement>(null);
   const customSelectRef = React.useRef<HTMLUListElement>(null);

@@ -80,6 +80,9 @@ export const useA11ySelect = <Option>(
       if (selectedOption) {
         const id = getOptionId(selectedOption);
         handleSetSelectedOption(id);
+      } else {
+        buttonRef.current?.focus();
+        setIsOpen(false);
       }
     }
   });
