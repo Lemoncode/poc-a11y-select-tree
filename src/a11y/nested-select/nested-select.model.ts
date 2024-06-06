@@ -1,19 +1,8 @@
-export type BaseOption<Option> = {
-  id: string;
-  label: string;
-  children?: Option[];
-};
+import { NestedOption } from "../common.model";
 
-export type FlatOption<Option extends BaseOption<Option>> = Omit<
+export type A11yNestedSelectOption<Option extends NestedOption<Option>> = Omit<
   Option,
-  'children'
-> & {
-  parentId?: string;
-};
-
-export type A11yNestedSelectOption<Option extends BaseOption<Option>> = Omit<
-  Option,
-  'children'
+  "children"
 > & {
   tabIndex: number;
   isSelectable: boolean;

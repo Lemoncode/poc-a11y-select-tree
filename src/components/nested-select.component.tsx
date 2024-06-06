@@ -1,38 +1,50 @@
-import React from 'react';
-import { TreeOption } from '../app';
-import { useA11yNestedSelect } from '../a11y';
-import { NestedOptions } from './nested-options.component';
+import React from "react";
+import { TreeOption } from "../app";
+import {
+  A11yNestedListOption,
+  useA11yNestedSelect,
+  mapNestedSelectOptionsToFlatOptions,
+} from "../a11y";
+import { NestedOptions } from "./nested-options.component";
 
 interface Props {
   options: TreeOption[];
 }
 
-export const NestedSelect: React.FC<Props> = prop => {
-  const { options } = prop;
+export const findPath = (
+  id: string | undefined,
+  optionList: A11yNestedListOption<TreeOption>[]
+) => {
+  const flatOptions = mapNestedSelectOptionsToFlatOptions(optionList);
+  const path: string[] = [];
+  let currentId = id;
+  while (currentId) {
+    const flatOption = flatOptions.find(
+      (option: any) => option.id === currentId
+    );
+    if (flatOption) {
+      path.unshift(flatOption.label);
+      currentId = flatOption.parentId;
+    } else {
+      currentId = undefined;
+    }
+  }
+  return path.join(" > ");
+};
 
-  const buttonRef = React.useRef<HTMLButtonElement>(null);
-  const optionsContainerRef = React.useRef<HTMLUListElement>(null);
-
+export const NestedSelect: React.FC<Props> = (props) => {
   const {
-    optionList,
+    optionListRef,
+    buttonRef,
+    options,
     isOpen,
     setIsOpen,
     onFocusOption,
     selectedOption,
     setSelectedOption,
-    selectedPath
-  } = useA11yNestedSelect(
-    options,
-    option => option.id,
-    optionsContainerRef,
-    buttonRef
-  );
+  } = useA11yNestedSelect(props.options, (option) => option.id);
 
-  // React.useEffect(() => {
-  //   setTimeout(() => {
-  //     setSelectedOption('lb23-01');
-  //   }, 2000);
-  // }, []);
+  const selectedPath = findPath(selectedOption?.id, options);
 
   return (
     <div>
@@ -49,16 +61,16 @@ export const NestedSelect: React.FC<Props> = prop => {
         ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
       >
-        {selectedOption ? selectedPath : 'Select an option'}
+        {selectedOption ? selectedPath : "Select an option"}
         <ul
           id="listbox1"
           role="tree"
           aria-labelledby="combo1-label"
           tabIndex={-1}
-          style={{ display: isOpen ? 'block' : 'none' }}
-          ref={optionsContainerRef}
+          style={{ display: isOpen ? "block" : "none" }}
+          ref={optionListRef}
         >
-          {optionList.map(option => {
+          {options.map((option) => {
             return option.children ? (
               <NestedOptions
                 handleSelectOption={setSelectedOption}

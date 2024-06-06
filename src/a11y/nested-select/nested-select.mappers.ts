@@ -1,11 +1,10 @@
-import {
-  A11yNestedSelectOption,
-  BaseOption,
-  FlatOption
-} from './nested-select.model';
-import { A11ySelectOption } from '../select';
+import { NestedOption, FlatOption } from "../common.model";
+import { A11yNestedSelectOption } from "./nested-select.model";
+import { A11ySelectOption } from "../select";
 
-export const mapOptionsToFlatOptions = <Option extends BaseOption<Option>>(
+export const mapNestedSelectOptionsToFlatOptions = <
+  Option extends NestedOption<Option>
+>(
   options: Option[],
   parentId?: string
 ): FlatOption<Option>[] => {
@@ -14,28 +13,32 @@ export const mapOptionsToFlatOptions = <Option extends BaseOption<Option>>(
     const flatOption: FlatOption<Option> = {
       ...option,
       parentId,
-      isSelectable: children ? false : true
+      isSelectable: !Array.isArray(children) || children.length === 0,
     };
     return [
       ...acc,
       flatOption,
-      ...(children ? mapOptionsToFlatOptions(children, option.id) : [])
+      ...(children
+        ? mapNestedSelectOptionsToFlatOptions(children, option.id)
+        : []),
     ];
   }, []);
 };
 
-export const mapFlatOptionsToOptions = <Option extends BaseOption<Option>>(
+export const mapFlatOptionsToNestedSelectOptions = <
+  Option extends NestedOption<Option>
+>(
   flatOptions: A11ySelectOption<FlatOption<Option>>[]
 ): A11yNestedSelectOption<Option>[] => {
   const map = new Map<string, any>();
-  flatOptions.forEach(flatOption => {
-    const { parentId, tabIndex, id, ...option } = flatOption;
+  flatOptions.forEach((flatOption) => {
+    const { parentId, tabIndex, id, isSelectable, ...option } = flatOption;
     map.set(id, { ...option, id, tabIndex, children: undefined });
   });
 
   const rootIds = new Set(map.keys());
 
-  flatOptions.forEach(flatOption => {
+  flatOptions.forEach((flatOption) => {
     const { parentId, id } = flatOption;
     const parent = map.get(parentId!);
     const child = map.get(id);
@@ -48,5 +51,5 @@ export const mapFlatOptionsToOptions = <Option extends BaseOption<Option>>(
     }
   });
 
-  return Array.from(rootIds).map(id => map.get(id));
+  return Array.from(rootIds).map((id) => map.get(id));
 };

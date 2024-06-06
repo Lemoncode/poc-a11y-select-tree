@@ -1,71 +1,41 @@
-import { useA11ySelect } from '../select';
-import { useOnKey } from '../on-key.hook';
-import { BaseOption, FlatOption } from './nested-select.model';
+import { useA11ySelect } from "../select";
+import { useA11yNested } from "../nested.hooks";
+import { NestedOption, FlatOption } from "../common.model";
 import {
-  mapOptionsToFlatOptions,
-  mapFlatOptionsToOptions
-} from './nested-select.mappers';
-import { findPath } from './nested-select.helpers';
+  mapNestedSelectOptionsToFlatOptions,
+  mapFlatOptionsToNestedSelectOptions,
+} from "./nested-select.mappers";
 
-export const useA11yNestedSelect = <Option extends BaseOption<Option>>(
+export const useA11yNestedSelect = <Option extends NestedOption<Option>>(
   options: Option[],
   getOptionId: <Key extends keyof FlatOption<Option>>(
     option: FlatOption<Option>
-  ) => FlatOption<Option>[Key],
-  optionsContainerRef: React.RefObject<HTMLElement>,
-  buttonRef: React.RefObject<HTMLButtonElement>
+  ) => FlatOption<Option>[Key]
 ) => {
-  const flatOptions = mapOptionsToFlatOptions(options);
+  const flatOptions = mapNestedSelectOptionsToFlatOptions(options);
 
   const {
+    optionListRef,
+    buttonRef,
     isOpen,
     setIsOpen,
-    optionList,
-    setOptionList,
+    options: internalOptions,
+    setOptions,
     selectedOption,
     setSelectedOption,
-    onFocusOption
-  } = useA11ySelect(flatOptions, getOptionId, optionsContainerRef, buttonRef);
+    onFocusOption,
+  } = useA11ySelect(flatOptions, getOptionId);
 
-  const updateFocus = (id: Option['id'] | undefined) => {
-    if (id) {
-      setOptionList(
-        optionList.map(option => {
-          return {
-            ...option,
-            tabIndex: option.id === id ? 0 : -1
-          };
-        })
-      );
-    }
-  };
-
-  //Maybe we don't need this.
-  useOnKey(optionsContainerRef, ['ArrowRight'], () => {
-    //If have childs, Focus on the first child
-    const focusedOption = optionList.find(option => option.tabIndex === 0);
-    const child = optionList.find(
-      option => option.parentId === focusedOption?.id
-    );
-    updateFocus(child?.id);
-  });
-
-  useOnKey(optionsContainerRef, ['ArrowLeft'], () => {
-    //If have parent, Focus on the parent
-    const focusedOption = optionList.find(option => option.tabIndex === 0);
-    const parent = optionList.find(
-      option => option.id === focusedOption?.parentId
-    );
-    updateFocus(parent?.id);
-  });
+  useA11yNested(optionListRef, internalOptions, setOptions);
 
   return {
-    optionList: mapFlatOptionsToOptions(optionList),
+    optionListRef,
+    buttonRef,
+    options: mapFlatOptionsToNestedSelectOptions(internalOptions),
     isOpen,
     setIsOpen,
     selectedOption,
     setSelectedOption,
-    selectedPath: findPath(selectedOption?.id, optionList),
-    onFocusOption
+    onFocusOption,
   };
 };
