@@ -1,9 +1,10 @@
-import React from "react";
-import { getFocusedOption } from "../focus.common-helpers";
-import { useOnKey } from "../on-key.hook";
-import { A11ySelectOption } from "./select.model";
-import { updateFocusBySelectedOption } from "./focus.helpers";
-import { useA11yList } from "../list";
+import React from 'react';
+import { getFocusedOption } from '../focus.common-helpers';
+import { useOnKey } from '../on-key.hook';
+import { useClickOutside } from '../click-outside.hook';
+import { A11ySelectOption } from './select.model';
+import { updateFocusBySelectedOption } from './focus.helpers';
+import { useA11yList } from '../list';
 
 export const useA11ySelect = <Option>(
   options: Option[],
@@ -18,7 +19,7 @@ export const useA11ySelect = <Option>(
     optionListRef,
     options: internalOptions,
     setOptions,
-    onFocusOption,
+    onFocusOption
   } = useA11yList(
     options,
     updateFocusBySelectedOption(getOptionId, selectedOption)
@@ -30,7 +31,7 @@ export const useA11ySelect = <Option>(
     buttonRef.current?.focus();
     setIsOpen(false);
     const selectedOption = internalOptions.find(
-      (option) => getOptionId(option) === selectedOptionId
+      option => getOptionId(option) === selectedOptionId
     );
     setSelectedOption(selectedOption);
     setOptions(
@@ -38,13 +39,13 @@ export const useA11ySelect = <Option>(
     );
   };
 
-  useOnKey(buttonRef, ["ArrowDown", "ArrowUp"], () => {
+  useOnKey(buttonRef, ['ArrowDown', 'ArrowUp'], () => {
     if (!isOpen) {
       setIsOpen(true);
     }
   });
 
-  useOnKey(buttonRef, ["Escape", "Tab"], (event: KeyboardEvent) => {
+  useOnKey(buttonRef, ['Escape', 'Tab'], (event: KeyboardEvent) => {
     if (isOpen) {
       event.preventDefault();
       if (selectedOption) {
@@ -57,7 +58,7 @@ export const useA11ySelect = <Option>(
     }
   });
 
-  useOnKey(buttonRef, [" ", "Enter"], (event: KeyboardEvent) => {
+  useOnKey(buttonRef, [' ', 'Enter'], (event: KeyboardEvent) => {
     if (isOpen) {
       event.preventDefault();
       const focusedOption = getFocusedOption(internalOptions);
@@ -68,6 +69,14 @@ export const useA11ySelect = <Option>(
     }
   });
 
+  const handleClickOutside = (event: MouseEvent) => {
+    if (isOpen && !buttonRef.current.contains(event.target)) {
+      setIsOpen(false);
+    }
+  };
+
+  useClickOutside(isOpen, handleClickOutside);
+
   return {
     optionListRef,
     buttonRef,
@@ -77,6 +86,6 @@ export const useA11ySelect = <Option>(
     setOptions,
     selectedOption,
     setSelectedOption: handleSetSelectedOption,
-    onFocusOption,
+    onFocusOption
   };
 };
