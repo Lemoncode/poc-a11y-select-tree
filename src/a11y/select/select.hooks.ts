@@ -18,6 +18,7 @@ export const useA11ySelect = <Option>(
     optionListRef,
     options: internalOptions,
     setOptions,
+    onFocusOption,
   } = useA11yList(
     options,
     updateFocusBySelectedOption(getOptionId, selectedOption)
@@ -67,13 +68,6 @@ export const useA11ySelect = <Option>(
     }
   });
 
-  const handleFocusOption =
-    (option: A11ySelectOption<Option>) => (element: any) => {
-      if (isOpen && option.tabIndex === 0) {
-        element?.focus();
-      }
-    };
-
   return {
     optionListRef,
     buttonRef,
@@ -83,6 +77,6 @@ export const useA11ySelect = <Option>(
     setOptions,
     selectedOption,
     setSelectedOption: handleSetSelectedOption,
-    onFocusOption: handleFocusOption,
+    onFocusOption,
   };
 };
