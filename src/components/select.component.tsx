@@ -1,5 +1,5 @@
-import React from 'react';
-import { useA11ySelect } from '../a11y';
+import React from "react";
+import { useA11ySelect } from "../a11y";
 
 interface Option {
   id: string;
@@ -8,23 +8,19 @@ interface Option {
 interface Props {
   options: string[];
 }
-export const Select: React.FC<Props> = props => {
-  const { options } = props;
-  const buttonRef = React.useRef<HTMLButtonElement>(null);
-  const customSelectRef = React.useRef<HTMLUListElement>(null);
-
+export const Select: React.FC<Props> = (props) => {
   const {
+    optionListRef,
+    buttonRef,
     isOpen,
     setIsOpen,
-    optionList,
+    options,
     selectedOption,
     setSelectedOption,
-    onFocusOption: onFocusOption
+    onFocusOption,
   } = useA11ySelect(
-    options.map<Option>(label => ({ id: label, label })),
-    option => option.id,
-    customSelectRef,
-    buttonRef
+    props.options.map<Option>((label) => ({ id: label, label })),
+    (option) => option.id
   );
 
   return (
@@ -42,16 +38,16 @@ export const Select: React.FC<Props> = props => {
         tabIndex={0}
         onClick={() => setIsOpen(!isOpen)}
       >
-        {selectedOption ? selectedOption.label : 'Select an option'}
+        {selectedOption ? selectedOption.label : "Select an option"}
         <ul
           id="listbox1"
           role="listbox"
           aria-labelledby="combo1-label"
           tabIndex={-1}
-          style={{ display: isOpen ? 'block' : 'none' }}
-          ref={customSelectRef}
+          style={{ display: isOpen ? "block" : "none" }}
+          ref={optionListRef}
         >
-          {optionList.map(option => (
+          {options.map((option) => (
             <li
               key={option.id}
               role="option"

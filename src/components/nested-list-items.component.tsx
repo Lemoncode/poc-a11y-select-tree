@@ -1,9 +1,9 @@
-import { A11yListOption } from '../a11y';
+import { A11yNestedListOption } from '../a11y';
 import { TreeOption } from '../app';
 
 interface Props {
-  option: A11yListOption<TreeOption>;
-  onFocusOption: (option: A11yListOption<TreeOption>) => (element: any) => void;
+  option: A11yNestedListOption<TreeOption>;
+  onFocusOption: (option: A11yNestedListOption<TreeOption>) => (element: any) => void;
 }
 
 export const NestedListItems: React.FC<Props> = props => {
