@@ -1,6 +1,7 @@
-import React from "react";
+import React from 'react';
 
 export const useOnKey = (
+  ref: React.RefObject<HTMLElement>,
   keys: string[],
   callback: (e: KeyboardEvent) => void
 ) => {
@@ -11,11 +12,10 @@ export const useOnKey = (
       }
     };
 
-    // TODO: attach event to some element provided by params
-    document.addEventListener("keydown", handleKeyDown);
+    ref.current?.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
+      ref.current?.removeEventListener('keydown', handleKeyDown);
     };
   }, [keys]);
 };

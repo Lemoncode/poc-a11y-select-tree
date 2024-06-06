@@ -31,8 +31,15 @@ ul {
   z-index: 1;
   border: 1px solid indigo;
 }
+li > ul {
+  position: relative;
+}
 
 .container {
   display: flex;
   gap: 50px;
+}
+
+.list {
+  position: relative;
 }
