@@ -11,6 +11,7 @@ export const useA11ySelect = <Option>(
   getOptionId: <Key extends keyof Option>(option: Option) => Option[Key]
 ) => {
   const buttonRef = React.useRef<any>(null);
+  const veilRef = React.useRef<any>(null);
   const [isOpen, setIsOpen] = React.useState(false);
   const [selectedOption, setSelectedOption] = React.useState<
     A11ySelectOption<Option> | undefined
@@ -45,9 +46,10 @@ export const useA11ySelect = <Option>(
     }
   });
 
-  useOnKey(buttonRef, ['Escape', 'Tab'], (event: KeyboardEvent) => {
+  useOnKey(optionListRef, ['Escape', 'Tab'], (event: KeyboardEvent) => {
     if (isOpen) {
       event.preventDefault();
+
       if (selectedOption) {
         const id = getOptionId(selectedOption);
         handleSetSelectedOption(id);
@@ -58,7 +60,7 @@ export const useA11ySelect = <Option>(
     }
   });
 
-  useOnKey(buttonRef, [' ', 'Enter'], (event: KeyboardEvent) => {
+  useOnKey(optionListRef, [' ', 'Enter'], (event: KeyboardEvent) => {
     if (isOpen) {
       event.preventDefault();
       const focusedOption = getFocusedOption(internalOptions);
@@ -69,17 +71,19 @@ export const useA11ySelect = <Option>(
     }
   });
 
-  const handleClickOutside = (event: MouseEvent) => {
-    if (isOpen && !buttonRef.current.contains(event.target)) {
+  const handleClickOutside = () => {
+    if (isOpen) {
+      buttonRef.current?.focus();
       setIsOpen(false);
     }
   };
 
-  useClickOutside(isOpen, handleClickOutside);
+  useClickOutside(isOpen, veilRef, handleClickOutside);
 
   return {
     optionListRef,
     buttonRef,
+    veilRef,
     isOpen,
     setIsOpen,
     options: internalOptions,
