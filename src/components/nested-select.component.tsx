@@ -49,13 +49,14 @@ export const NestedSelect: React.FC<Props> = props => {
 
   return (
     <div>
-      <p>Custom Tree Select</p>
+      <p id="combo2-label">Custom Tree Select</p>
       <button
         type="button"
         aria-controls="listbox2"
         aria-expanded={isOpen}
         aria-haspopup="tree"
         aria-labelledby="combo2-label"
+        aria-activedescendant={selectedOption?.id}
         id="combo2"
         role="combobox"
         tabIndex={0}
@@ -87,9 +88,10 @@ export const NestedSelect: React.FC<Props> = props => {
                 ) : (
                   <li
                     key={option.id}
+                    id={option.id}
                     role="treeitem"
                     tabIndex={option.tabIndex}
-                    aria-selected={selectedOption?.label === option.label}
+                    aria-selected={selectedOption?.id === option.id}
                     onClick={() => setSelectedOption(option.id)}
                     ref={onFocusOption(option)}
                   >

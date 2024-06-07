@@ -15,6 +15,7 @@ export const NestedOptions: React.FC<Props> = props => {
   return (
     <li
       key={option.id}
+      id={option.id}
       role="treeitem"
       aria-expanded="true"
       // aria-disabled="true"
@@ -36,6 +37,7 @@ export const NestedOptions: React.FC<Props> = props => {
           ) : (
             <li
               key={child.id}
+              id={child.id}
               role="treeitem"
               tabIndex={child.tabIndex}
               aria-selected={selectedOption?.id === child.id}

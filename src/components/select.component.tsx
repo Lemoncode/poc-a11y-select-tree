@@ -27,7 +27,7 @@ export const Select: React.FC<Props> = props => {
 
   return (
     <div>
-      <p>Custom Select</p>
+      <p id="combo1-label">Custom Select</p>
       <button
         ref={buttonRef}
         type="button"
@@ -35,6 +35,7 @@ export const Select: React.FC<Props> = props => {
         aria-expanded={isOpen}
         aria-haspopup="listbox"
         aria-labelledby="combo1-label"
+        aria-activedescendant={selectedOption?.id}
         id="combo1"
         role="combobox"
         tabIndex={0}
@@ -58,6 +59,7 @@ export const Select: React.FC<Props> = props => {
               {options.map(option => (
                 <li
                   key={option.id}
+                  id={option.id}
                   role="option"
                   tabIndex={option.tabIndex}
                   aria-selected={selectedOption?.id === option.id}
