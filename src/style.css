@@ -24,13 +24,16 @@ li:focus {
   outline: 1px solid #f19e9e;
 }
 
-ul {
+.options-list {
+  background-color: aliceblue;
+  position: absolute;
+  z-index: 2;
   list-style-type: none;
   padding: 10px;
-  position: absolute;
-  z-index: 1;
   border: 1px solid indigo;
+  overflow: auto;
 }
+
 li > ul {
   position: relative;
 }
@@ -42,4 +45,14 @@ li > ul {
 
 .list {
   position: relative;
+}
+
+.veil {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
 }

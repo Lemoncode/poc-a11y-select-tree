@@ -62,8 +62,8 @@ export const App = () => {
       <NestedSelect options={TREE_OPTION} />
 
       <div>
-        <p>Real select</p>
-        <select>
+        <p id="combo3-label">Real select</p>
+        <select aria-labelledby="combo3-label">
           <option id="lb2-01">weather</option>
           <option id="lb2-02">salsa recipes</option>
           <option id="lb2-03">cheap flights to NY</option>
