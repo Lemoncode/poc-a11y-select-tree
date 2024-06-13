@@ -32,8 +32,8 @@ export const mapFlatOptionsToNestedSelectOptions = <
 ): A11yNestedSelectOption<Option>[] => {
   const map = new Map<string, any>();
   flatOptions.forEach((flatOption) => {
-    const { parentId, tabIndex, id, ...option } = flatOption;
-    map.set(id, { ...option, id, tabIndex, children: undefined });
+    const { parentId, tabIndex, id, isSelectable, ...option } = flatOption;
+    map.set(id, { ...option, id, tabIndex, isSelectable, children: undefined });
   });
 
   const rootIds = new Set(map.keys());

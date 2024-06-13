@@ -1,4 +1,4 @@
-import { FlatOption, NestedOption } from "../common.model";
+import { BaseA11yOption, FlatOption, NestedOption } from "../common.model";
 import { A11yNestedListOption } from "./nested-list.model";
 
 export const mapNestedListOptionsToFlatOptions = <
@@ -26,7 +26,7 @@ export const mapNestedListOptionsToFlatOptions = <
 export const mapFlatOptionsToNestedListOptions = <
   Option extends NestedOption<Option>
 >(
-  flatOptions: A11yNestedListOption<FlatOption<Option>>[]
+  flatOptions: BaseA11yOption<FlatOption<Option>>[]
 ): A11yNestedListOption<Option>[] => {
   const map = new Map<string, any>();
   flatOptions.forEach((flatOption) => {
