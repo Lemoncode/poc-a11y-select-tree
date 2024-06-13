@@ -1,10 +1,10 @@
-import { useA11ySelect } from "../select";
-import { useA11yNested } from "../nested.hooks";
-import { NestedOption, FlatOption } from "../common.model";
+import { useA11ySelect } from '../select';
+import { useA11yNested } from '../nested.hooks';
+import { NestedOption, FlatOption } from '../common.model';
 import {
   mapNestedSelectOptionsToFlatOptions,
-  mapFlatOptionsToNestedSelectOptions,
-} from "./nested-select.mappers";
+  mapFlatOptionsToNestedSelectOptions
+} from './nested-select.mappers';
 
 export const useA11yNestedSelect = <Option extends NestedOption<Option>>(
   options: Option[],
@@ -17,13 +17,14 @@ export const useA11yNestedSelect = <Option extends NestedOption<Option>>(
   const {
     optionListRef,
     buttonRef,
+    veilRef,
     isOpen,
     setIsOpen,
     options: internalOptions,
     setOptions,
     selectedOption,
     setSelectedOption,
-    onFocusOption,
+    onFocusOption
   } = useA11ySelect(flatOptions, getOptionId);
 
   useA11yNested(optionListRef, internalOptions, setOptions);
@@ -31,11 +32,12 @@ export const useA11yNestedSelect = <Option extends NestedOption<Option>>(
   return {
     optionListRef,
     buttonRef,
+    veilRef,
     options: mapFlatOptionsToNestedSelectOptions(internalOptions),
     isOpen,
     setIsOpen,
     selectedOption,
     setSelectedOption,
-    onFocusOption,
+    onFocusOption
   };
 };

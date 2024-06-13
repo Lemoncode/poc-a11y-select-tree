@@ -36,6 +36,7 @@ export const NestedSelect: React.FC<Props> = props => {
   const {
     optionListRef,
     buttonRef,
+    veilRef,
     options,
     isOpen,
     setIsOpen,
@@ -48,13 +49,14 @@ export const NestedSelect: React.FC<Props> = props => {
 
   return (
     <div>
-      <p>Custom Tree Select</p>
+      <p id="combo2-label">Custom Tree Select</p>
       <button
         type="button"
-        aria-controls="listbox1"
+        aria-controls="listbox2"
         aria-expanded={isOpen}
         aria-haspopup="tree"
         aria-labelledby="combo2-label"
+        aria-activedescendant={selectedOption?.id}
         id="combo2"
         role="combobox"
         tabIndex={0}
@@ -63,36 +65,42 @@ export const NestedSelect: React.FC<Props> = props => {
       >
         {selectedOption ? selectedPath : 'Select an option'}
         {isOpen && (
-          <ul
-            id="listbox1"
-            role="tree"
-            aria-labelledby="combo1-label"
-            tabIndex={-1}
-            ref={optionListRef}
-          >
-            {options.map(option => {
-              return option.children ? (
-                <NestedOptions
-                  handleSelectOption={setSelectedOption}
-                  option={option}
-                  selectedOption={selectedOption}
-                  onFocusOption={onFocusOption}
-                  key={option.id}
-                ></NestedOptions>
-              ) : (
-                <li
-                  key={option.id}
-                  role="treeitem"
-                  tabIndex={option.tabIndex}
-                  aria-selected={selectedOption?.label === option.label}
-                  onClick={() => setSelectedOption(option.id)}
-                  ref={onFocusOption(option)}
-                >
-                  {option.label}
-                </li>
-              );
-            })}
-          </ul>
+          <>
+            <div ref={veilRef} className="veil"></div>
+            <ul
+              id="listbox2"
+              role="tree"
+              aria-labelledby="combo2-label"
+              tabIndex={-1}
+              ref={optionListRef}
+              className="options-list"
+              onClick={e => e.stopPropagation()}
+            >
+              {options.map(option => {
+                return option.children ? (
+                  <NestedOptions
+                    handleSelectOption={setSelectedOption}
+                    option={option}
+                    selectedOption={selectedOption}
+                    onFocusOption={onFocusOption}
+                    key={option.id}
+                  ></NestedOptions>
+                ) : (
+                  <li
+                    key={option.id}
+                    id={option.id}
+                    role="treeitem"
+                    tabIndex={option.tabIndex}
+                    aria-selected={selectedOption?.id === option.id}
+                    onClick={() => setSelectedOption(option.id)}
+                    ref={onFocusOption(option)}
+                  >
+                    {option.label}
+                  </li>
+                );
+              })}
+            </ul>
+          </>
         )}
       </button>
     </div>

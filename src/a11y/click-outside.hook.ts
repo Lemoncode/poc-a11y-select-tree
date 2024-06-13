@@ -2,6 +2,7 @@ import React from 'react';
 
 export const useClickOutside = (
   isOpen: boolean,
+  ref: React.RefObject<HTMLElement>,
   callback: (e: MouseEvent) => void
 ) => {
   const handleClickOutside = (e: MouseEvent) => {
@@ -9,10 +10,10 @@ export const useClickOutside = (
   };
 
   React.useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+    ref.current?.addEventListener('click', handleClickOutside);
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      ref.current?.removeEventListener('click', handleClickOutside);
     };
   }, [isOpen]);
 };

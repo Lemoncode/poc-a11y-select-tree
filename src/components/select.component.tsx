@@ -8,10 +8,12 @@ interface Option {
 interface Props {
   options: string[];
 }
+
 export const Select: React.FC<Props> = props => {
   const {
     optionListRef,
     buttonRef,
+    veilRef,
     isOpen,
     setIsOpen,
     options,
@@ -25,7 +27,7 @@ export const Select: React.FC<Props> = props => {
 
   return (
     <div>
-      <p>Custom Select</p>
+      <p id="combo1-label">Custom Select</p>
       <button
         ref={buttonRef}
         type="button"
@@ -33,6 +35,7 @@ export const Select: React.FC<Props> = props => {
         aria-expanded={isOpen}
         aria-haspopup="listbox"
         aria-labelledby="combo1-label"
+        aria-activedescendant={selectedOption?.id}
         id="combo1"
         role="combobox"
         tabIndex={0}
@@ -42,28 +45,34 @@ export const Select: React.FC<Props> = props => {
       >
         {selectedOption ? selectedOption.label : 'Select an option'}
         {isOpen && (
-          <ul
-            id="listbox1"
-            role="listbox"
-            aria-labelledby="combo1-label"
-            tabIndex={-1}
-            ref={optionListRef}
-          >
-            {options.map(option => (
-              <li
-                key={option.id}
-                role="option"
-                tabIndex={option.tabIndex}
-                aria-selected={selectedOption?.id === option.id}
-                onClick={() => {
-                  setSelectedOption(option.id);
-                }}
-                ref={onFocusOption(option)}
-              >
-                {option.label}
-              </li>
-            ))}
-          </ul>
+          <>
+            <div ref={veilRef} className="veil"></div>
+            <ul
+              id="listbox1"
+              role="listbox"
+              aria-labelledby="combo1-label"
+              tabIndex={-1}
+              ref={optionListRef}
+              className="options-list"
+              onClick={e => e.stopPropagation()}
+            >
+              {options.map(option => (
+                <li
+                  key={option.id}
+                  id={option.id}
+                  role="option"
+                  tabIndex={option.tabIndex}
+                  aria-selected={selectedOption?.id === option.id}
+                  onClick={() => {
+                    setSelectedOption(option.id);
+                  }}
+                  ref={onFocusOption(option)}
+                >
+                  {option.label}
+                </li>
+              ))}
+            </ul>
+          </>
         )}
       </button>
     </div>
