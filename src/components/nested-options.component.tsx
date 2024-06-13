@@ -41,7 +41,7 @@ export const NestedOptions: React.FC<Props> = props => {
               role="treeitem"
               tabIndex={child.tabIndex}
               aria-selected={selectedOption?.id === child.id}
-              aria-disabled={child.isSelectable}
+              aria-disabled={!child.isSelectable}
               onClick={() => handleSelectOption(child.id)}
               ref={onFocusOption(child)}
             >
