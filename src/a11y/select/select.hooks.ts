@@ -3,19 +3,26 @@ import { getFocusedOption } from '../focus.common-helpers';
 import { useOnKey } from '../on-key.hook';
 import { useClickOutside } from '../click-outside.hook';
 import { A11ySelectOption } from './select.model';
-import { updateFocusBySelectedOption } from './focus.helpers';
+import {
+  updateFocusBySelectedOption,
+  valueToA11ySelectedOption
+} from './focus.helpers';
 import { useA11yList } from '../list';
 
 export const useA11ySelect = <Option>(
   options: Option[],
-  getOptionId: <Key extends keyof Option>(option: Option) => Option[Key]
+  getOptionId: <Key extends keyof Option>(option: Option) => Option[Key],
+  onChangeOption: (id: any) => void,
+  value?: string
 ) => {
   const buttonRef = React.useRef<any>(null);
   const veilRef = React.useRef<any>(null);
   const [isOpen, setIsOpen] = React.useState(false);
+
   const [selectedOption, setSelectedOption] = React.useState<
     A11ySelectOption<Option> | undefined
-  >(undefined);
+  >(valueToA11ySelectedOption(options, getOptionId, value));
+
   const {
     optionListRef,
     options: internalOptions,
@@ -34,6 +41,10 @@ export const useA11ySelect = <Option>(
     const selectedOption = internalOptions.find(
       option => getOptionId(option) === selectedOptionId
     );
+    if (selectedOption) {
+      const id = getOptionId(selectedOption);
+      onChangeOption(id);
+    }
     setSelectedOption(selectedOption);
     setOptions(
       updateFocusBySelectedOption(getOptionId, selectedOption)(internalOptions)
@@ -49,7 +60,7 @@ export const useA11ySelect = <Option>(
   useOnKey(optionListRef, ['Escape', 'Tab'], (event: KeyboardEvent) => {
     if (isOpen) {
       event.preventDefault();
-
+      event.stopPropagation();
       if (selectedOption) {
         const id = getOptionId(selectedOption);
         handleSetSelectedOption(id);

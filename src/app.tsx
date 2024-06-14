@@ -1,3 +1,4 @@
+import React from 'react';
 import { NestedSelect, Select, NestedList } from './components';
 
 export interface TreeOption {
@@ -56,10 +57,20 @@ export const TREE_OPTION: TreeOption[] = [
 ];
 
 export const App = () => {
+  const [value, setValue] = React.useState<string | undefined>('lb2-03');
+
+  const handleValueChange = (id: string) => {
+    setValue(id);
+  };
+
   return (
     <div className="container">
       <Select options={OPTION_LABELS} />
-      <NestedSelect options={TREE_OPTION} />
+      <NestedSelect
+        options={TREE_OPTION}
+        value={value}
+        onChange={handleValueChange}
+      />
 
       <div>
         <p id="combo3-label">Real select</p>
