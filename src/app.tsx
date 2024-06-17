@@ -57,10 +57,13 @@ export const TREE_OPTION: TreeOption[] = [
 ];
 
 export const App = () => {
-  const [value, setValue] = React.useState<string | undefined>('lb2-03');
+  const [value, setValue] = React.useState<TreeOption | undefined>({
+    id: 'lb23-00',
+    label: 'Amazon'
+  });
 
-  const handleValueChange = (id: string) => {
-    setValue(id);
+  const handleValueChange = (option: TreeOption | undefined) => {
+    setValue(option);
   };
 
   return (
@@ -75,7 +78,7 @@ export const App = () => {
       <div>
         <p id="combo3-label">Real select</p>
         <select aria-labelledby="combo3-label">
-          <option id="lb2-01">weather</option>
+          <option id="lb3-01">weather</option>
           <option id="lb2-02">salsa recipes</option>
           <option id="lb2-03">cheap flights to NY</option>
           <option id="lb2-04">dictionary</option>

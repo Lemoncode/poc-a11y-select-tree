@@ -2,26 +2,24 @@ import React from 'react';
 import { getFocusedOption } from '../focus.common-helpers';
 import { useOnKey } from '../on-key.hook';
 import { useClickOutside } from '../click-outside.hook';
-import { A11ySelectOption } from './select.model';
-import {
-  updateFocusBySelectedOption,
-  valueToA11ySelectedOption
-} from './focus.helpers';
+
+import { updateFocusBySelectedOption } from './focus.helpers';
 import { useA11yList } from '../list';
+import { mapInternalSelectOptionToOption } from './select.mappers';
 
 export const useA11ySelect = <Option>(
   options: Option[],
   getOptionId: <Key extends keyof Option>(option: Option) => Option[Key],
-  onChangeOption: (id: any) => void,
-  value?: string
+  initialOption?: Option,
+  onChangeOption?: (option: Option | undefined) => void
 ) => {
   const buttonRef = React.useRef<any>(null);
   const veilRef = React.useRef<any>(null);
   const [isOpen, setIsOpen] = React.useState(false);
 
   const [selectedOption, setSelectedOption] = React.useState<
-    A11ySelectOption<Option> | undefined
-  >(valueToA11ySelectedOption(options, getOptionId, value));
+    Option | undefined
+  >(initialOption);
 
   const {
     optionListRef,
@@ -38,12 +36,14 @@ export const useA11ySelect = <Option>(
   ) => {
     buttonRef.current?.focus();
     setIsOpen(false);
-    const selectedOption = internalOptions.find(
+    const internalSelectedOption = internalOptions.find(
       option => getOptionId(option) === selectedOptionId
     );
-    if (selectedOption) {
-      const id = getOptionId(selectedOption);
-      onChangeOption(id);
+    const selectedOption = mapInternalSelectOptionToOption(
+      internalSelectedOption
+    );
+    if (onChangeOption) {
+      onChangeOption(selectedOption);
     }
     setSelectedOption(selectedOption);
     setOptions(

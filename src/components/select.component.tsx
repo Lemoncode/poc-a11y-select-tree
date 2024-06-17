@@ -23,6 +23,7 @@ export const Select: React.FC<Props> = props => {
   } = useA11ySelect(
     props.options.map<Option>(label => ({ id: label, label })),
     option => option.id,
+    undefined,
     () => {}
   );
 

@@ -9,8 +9,8 @@ import { NestedOptions } from './nested-options.component';
 
 interface Props {
   options: TreeOption[];
-  value: string | undefined;
-  onChange: (id: string) => void;
+  value: TreeOption | undefined;
+  onChange: (option: TreeOption | undefined) => void;
 }
 
 export const findPath = (
@@ -48,8 +48,8 @@ export const NestedSelect: React.FC<Props> = props => {
   } = useA11yNestedSelect(
     props.options,
     option => option.id,
-    props.onChange,
-    props.value
+    props.value,
+    props.onChange
   );
 
   const selectedPath = findPath(selectedOption?.id, options);

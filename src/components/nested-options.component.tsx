@@ -3,11 +3,11 @@ import { TreeOption } from '../app';
 
 interface Props {
   option: A11yNestedSelectOption<TreeOption>;
-  selectedOption: A11yNestedSelectOption<TreeOption> | undefined;
+  selectedOption: TreeOption | undefined;
   onFocusOption: (
     option: A11yNestedSelectOption<TreeOption>
   ) => (element: any) => void;
-  handleSelectOption: (id: string) => void;
+  handleSelectOption: (option: string | undefined) => void;
 }
 
 export const NestedOptions: React.FC<Props> = props => {
