@@ -1,9 +1,9 @@
-import React from "react";
-import { BaseA11yOption } from "../common.model";
-import { getArrowDownIndex, getArrowUpIndex } from "../focus.common-helpers";
-import { useOnKey } from "../on-key.hook";
-import { onFocusOption, setInitialFocus } from "./focus.helpers";
-import { SetInitialFocusFn } from "./list.model";
+import React from 'react';
+import { BaseA11yOption } from '../common.model';
+import { getArrowDownIndex, getArrowUpIndex } from '../focus.common-helpers';
+import { useOnKey } from '../on-key.hook';
+import { onFocusOption, setInitialFocus } from './focus.helpers';
+import { SetInitialFocusFn } from './list.model';
 
 export const useA11yList = <Option, A11yOption extends BaseA11yOption<Option>>(
   options: Option[],
@@ -16,34 +16,36 @@ export const useA11yList = <Option, A11yOption extends BaseA11yOption<Option>>(
 
   const handleFocus = (event: KeyboardEvent) => {
     const currentIndex = internalOptions.findIndex(
-      (option) => option.tabIndex === 0
+      option => option.tabIndex === 0
     );
     const nextIndex =
-      event.key === "ArrowUp"
-        ? getArrowUpIndex(currentIndex, internalOptions)
+      event.key === 'ArrowUp'
+        ? getArrowUpIndex(currentIndex)
         : getArrowDownIndex(currentIndex, internalOptions);
 
-    setInternalOptions((prevOptions) =>
-      prevOptions.map((option, index) => {
-        switch (index) {
-          case currentIndex:
-            return {
-              ...option,
-              tabIndex: -1,
-            };
-          case nextIndex:
-            return {
-              ...option,
-              tabIndex: 0,
-            };
-          default:
-            return option;
-        }
-      })
-    );
+    if (currentIndex !== nextIndex) {
+      setInternalOptions(prevOptions =>
+        prevOptions.map((option, index) => {
+          switch (index) {
+            case currentIndex:
+              return {
+                ...option,
+                tabIndex: -1
+              };
+            case nextIndex:
+              return {
+                ...option,
+                tabIndex: 0
+              };
+            default:
+              return option;
+          }
+        })
+      );
+    }
   };
 
-  useOnKey(optionListRef, ["ArrowDown", "ArrowUp"], (event: KeyboardEvent) => {
+  useOnKey(optionListRef, ['ArrowDown', 'ArrowUp'], (event: KeyboardEvent) => {
     handleFocus(event);
   });
 
@@ -51,6 +53,6 @@ export const useA11yList = <Option, A11yOption extends BaseA11yOption<Option>>(
     optionListRef,
     options: internalOptions,
     setOptions: setInternalOptions,
-    onFocusOption,
+    onFocusOption
   };
 };
