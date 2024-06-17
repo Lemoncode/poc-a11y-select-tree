@@ -1,60 +1,12 @@
 import React from 'react';
 import { NestedSelect, Select, NestedList } from './components';
+import { LIST_OPTION, OPTION_LABELS, TREE_OPTION } from './selectsValues.mock';
 
 export interface TreeOption {
   id: string;
   label: string;
   children?: TreeOption[];
 }
-
-const OPTION_LABELS = [
-  'weather',
-  'salsa recipes',
-  'cheap flights to NY',
-  'dictionary',
-  'baseball scores',
-  'hotels in NY',
-  'mortgage calculator',
-  'restaurants near me',
-  'free games',
-  'gas prices',
-  'classical music'
-];
-
-export const TREE_OPTION: TreeOption[] = [
-  {
-    id: 'lb2-01',
-    label: 'weather'
-  },
-  { id: 'lb2-02', label: 'salsa recipes' },
-  { id: 'lb2-03', label: 'cheap flights to NY' },
-  { id: 'lb2-04', label: 'dictionary' },
-  { id: 'lb2-05', label: 'baseball scores' },
-  {
-    id: 'lb2-06',
-    label: 'hotels in NY',
-
-    children: [
-      { id: 'lb22-01', label: 'Watter' },
-      { id: 'lb22-02', label: 'Sea' },
-      {
-        id: 'lb22-03',
-        label: 'River',
-
-        children: [
-          { id: 'lb23-00', label: 'Amazon' },
-          { id: 'lb23-01', label: 'Nile' },
-          { id: 'lb23-02', label: 'Mississippi' }
-        ]
-      }
-    ]
-  },
-  { id: 'lb2-07', label: 'mortgage calculator' },
-  { id: 'lb2-08', label: 'restaurants near me' },
-  { id: 'lb2-09', label: 'free games' },
-  { id: 'lb2-10', label: 'gas prices' },
-  { id: 'lb2-11', label: 'classical music' }
-];
 
 export const App = () => {
   const [value, setValue] = React.useState<TreeOption | undefined>({
@@ -66,6 +18,7 @@ export const App = () => {
     setValue(option);
   };
 
+  console.log('me cargo');
   return (
     <div className="container">
       <Select options={OPTION_LABELS} />
@@ -73,20 +26,21 @@ export const App = () => {
         options={TREE_OPTION}
         value={value}
         onChange={handleValueChange}
+        // key={`Value-${value?.id}`}
       />
 
       <div>
         <p id="combo3-label">Real select</p>
         <select aria-labelledby="combo3-label">
           <option id="lb3-01">weather</option>
-          <option id="lb2-02">salsa recipes</option>
-          <option id="lb2-03">cheap flights to NY</option>
-          <option id="lb2-04">dictionary</option>
-          <option id="lb2-05">baseball scores</option>
-          <option id="lb2-06">hotels in NY</option>
+          <option id="lb3-02">salsa recipes</option>
+          <option id="lb3-03">cheap flights to NY</option>
+          <option id="lb3-04">dictionary</option>
+          <option id="lb3-05">baseball scores</option>
+          <option id="lb3-06">hotels in NY</option>
         </select>
       </div>
-      <NestedList options={TREE_OPTION} />
+      <NestedList options={LIST_OPTION} />
     </div>
   );
 };

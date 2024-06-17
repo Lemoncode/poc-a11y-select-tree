@@ -22,9 +22,7 @@ export const Select: React.FC<Props> = props => {
     onFocusOption
   } = useA11ySelect(
     props.options.map<Option>(label => ({ id: label, label })),
-    option => option.id,
-    undefined,
-    () => {}
+    option => option.id
   );
 
   return (
