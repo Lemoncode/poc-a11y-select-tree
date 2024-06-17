@@ -22,6 +22,10 @@ export const NestedOptions: React.FC<Props> = props => {
       aria-selected="false"
       tabIndex={option.tabIndex}
       ref={onFocusOption(option)}
+      onClick={e => {
+        e.stopPropagation();
+        handleSelectOption('');
+      }}
     >
       {option.label}
       <ul role="group">

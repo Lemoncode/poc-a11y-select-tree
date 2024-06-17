@@ -32,7 +32,7 @@ export const useA11ySelect = <Option>(
   );
 
   const handleSetSelectedOption = (
-    selectedOptionId: ReturnType<typeof getOptionId>
+    selectedOptionId: ReturnType<typeof getOptionId> | undefined
   ) => {
     buttonRef.current?.focus();
     setIsOpen(false);
@@ -78,6 +78,8 @@ export const useA11ySelect = <Option>(
       if (focusedOption && focusedOption.isSelectable) {
         const id = getOptionId(focusedOption);
         handleSetSelectedOption(id);
+      } else {
+        handleSetSelectedOption(undefined);
       }
     }
   });
