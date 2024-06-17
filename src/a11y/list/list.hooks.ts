@@ -4,6 +4,7 @@ import { getArrowDownIndex, getArrowUpIndex } from '../focus.common-helpers';
 import { useOnKey } from '../on-key.hook';
 import { onFocusOption, setInitialFocus } from './focus.helpers';
 import { SetInitialFocusFn } from './list.model';
+import { useOnTwoKeys } from '../on-two-Keys.hook';
 
 export const useA11yList = <Option, A11yOption extends BaseA11yOption<Option>>(
   options: Option[],
@@ -45,9 +46,45 @@ export const useA11yList = <Option, A11yOption extends BaseA11yOption<Option>>(
     }
   };
 
+  const handleFirstAndLast = (value: number) => {
+    setInternalOptions(prevOptions =>
+      prevOptions.map((option, index) => {
+        switch (index) {
+          case value:
+            return {
+              ...option,
+              tabIndex: 0
+            };
+          default:
+            return {
+              ...option,
+              tabIndex: -1
+            };
+        }
+      })
+    );
+  };
+
+  //Need this for Mac users
+  useOnTwoKeys(
+    optionListRef,
+    ['ArrowUp', 'ArrowDown'],
+    'Meta',
+    (event: KeyboardEvent) =>
+      event.key === 'ArrowUp'
+        ? handleFirstAndLast(0)
+        : handleFirstAndLast(internalOptions.length - 1)
+  );
+
   useOnKey(optionListRef, ['ArrowDown', 'ArrowUp'], (event: KeyboardEvent) => {
     handleFocus(event);
   });
+
+  useOnKey(optionListRef, ['Home', 'End'], (event: KeyboardEvent) =>
+    event.key === 'Home'
+      ? handleFirstAndLast(0)
+      : handleFirstAndLast(internalOptions.length - 1)
+  );
 
   return {
     optionListRef,
