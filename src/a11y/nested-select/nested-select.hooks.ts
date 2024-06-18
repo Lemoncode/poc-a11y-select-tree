@@ -10,7 +10,9 @@ export const useA11yNestedSelect = <Option extends NestedOption<Option>>(
   options: Option[],
   getOptionId: <Key extends keyof FlatOption<Option>>(
     option: FlatOption<Option>
-  ) => FlatOption<Option>[Key]
+  ) => FlatOption<Option>[Key],
+  initialOption?: Option,
+  onChangeOption?: (option: FlatOption<Option> | undefined) => void
 ) => {
   const flatOptions = mapNestedSelectOptionsToFlatOptions(options);
 
@@ -25,7 +27,7 @@ export const useA11yNestedSelect = <Option extends NestedOption<Option>>(
     selectedOption,
     setSelectedOption,
     onFocusOption
-  } = useA11ySelect(flatOptions, getOptionId);
+  } = useA11ySelect(flatOptions, getOptionId, initialOption, onChangeOption);
 
   useA11yNested(optionListRef, internalOptions, setOptions);
 
@@ -34,6 +36,7 @@ export const useA11yNestedSelect = <Option extends NestedOption<Option>>(
     buttonRef,
     veilRef,
     options: mapFlatOptionsToNestedSelectOptions(internalOptions),
+    setOptions,
     isOpen,
     setIsOpen,
     selectedOption,
